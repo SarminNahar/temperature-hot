@@ -22,20 +22,39 @@
     <div class="container">
         <form class="col-md-6 m-auto py-5">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <input id="input-value" type="text" class="form-control" placeholder="Enter a location for Weather ...">
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-danger">Search</button>
+                    <button id="search-button" type="button" class="btn btn-danger">Search</button>
                 </div>
             </div>
         </form>
         <div class="weather-status text-white text-center">
-            <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
-            <h1>Dhaka</h1>
-            <h3><span>38.06</span>&deg;C</h3>
-            <h1 class="lead">Clouds</h1>
+            <!-- <img  id="weather-icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt=""> -->
+            <!-- <img  id="weather-icon" src="https://openweathermap.org/img/w/'+weatherIcon+'.png" alt=""> -->
+            <img  id="weather-icon" src='http://openweathermap.org/img/w/" + data.weather[0].icon + ".png' alt="">
+            <h1 id="city">city</h1>
+            <h3><span id="temp">0</span>&deg;C</h3>
+            <h1 id="weather-condition" class="lead">Weather Status</h1>
         </div>
     </div>
 
 </body>
+
+<script>
+    document.getElementById('search-button').addEventListener('click', function(){
+       const inputValue = document.getElementById('input-value').value;
+       fetch("https://api.openweathermap.org/data/2.5/weather?q="+inputValue+"&appid=21e61c909d0c21e077fa1af66c1ac40f")
+       .then(res => res.json())
+       .then(data =>{
+           const celsius = data.main.temp - 273.15;
+           document.getElementById('temp').innerText = Math.ceil(celsius);
+           
+           const weatherIcon = data.weather[0].icon;
+           document.getElementById('weather-icon').innerText = weatherIcon;
+           document.getElementById('city').innerText =inputValue;
+           document.getElementById('weather-condition').innerText = data.weather[0].main;
+       })
+    })
+</script>
 
 </html>
